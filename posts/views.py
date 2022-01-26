@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 
 from .models import Post, Vote
@@ -13,8 +14,12 @@ class PostList(generics.ListCreateAPIView):
         serializer.save(poster=self.request.user)
 
 
-class VoteList(generics.ListAPIView):
-    queryset = Vote.objects.all()
+class VoteCreate(generics.CreateAPIView):
     serializer_class = VoteSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
+    def perform_create(self, serializer):
+        user = self.request.user
+        post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        serializer.save(voter=user, post=post)
