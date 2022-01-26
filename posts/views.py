@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 
-from .models import Post, Vote
+from .models import Post
 from .serializers import PostSerializer, VoteSerializer
 
 
@@ -17,7 +17,6 @@ class PostList(generics.ListCreateAPIView):
 class VoteCreate(generics.CreateAPIView):
     serializer_class = VoteSerializer
     permission_classes = [permissions.IsAuthenticated]
-
 
     def perform_create(self, serializer):
         user = self.request.user

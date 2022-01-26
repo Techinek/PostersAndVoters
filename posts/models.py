@@ -31,4 +31,4 @@ class Vote(models.Model):
         ]
 
     def __str__(self):
-        return f"Voter: {self.voter.name} voted for {self.post}"
+        return f"{self.voter} voted for {self.post}"
