@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from .models import Post, Vote
 from .serializers import PostSerializer, VoteSerializer
+from .permissions import IsOwner
 
 
 class PostList(generics.ListCreateAPIView):
@@ -14,6 +15,12 @@ class PostList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(poster=self.request.user)
+
+
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwner]
 
 
 class VoteCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
